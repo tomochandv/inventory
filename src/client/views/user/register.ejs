@@ -1,0 +1,45 @@
+<%- include('../header') -%>
+<%- include('../nav') -%>
+<div class="container">
+  <div class="col-md-12">
+    <h4>회원가입</h4>
+    <p class="read">
+      해당 사이트는 <a href="https://olis.or.kr/license/Detailselect.do?lId=1006&mapCode=010006" target="_blank">MIT License</a>로 만들어 졌으며, 모든 개인 정보는 암호화 되어 저장됩니다. <br>
+      해당 사이트는 이용시 발생하는 모든 책임을 지지 않습니다.<br>
+      이용시에 필요하다고 느끼는 기능이나 의견을 메일로 주시면 적극 반영 하는 방향으로 진행하겠습니다.
+    </p>
+  </div>
+  <div class="col-md-12">
+    <form class="needs-validation" novalidate>
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <label for="email">이메일</label>
+          <input type="email" class="form-control" id="email" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            올바른 이메일 주소를 입력하세요.
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="pwd">비밀번호</label>
+          <input type="password" class="form-control" id="pwd" minlength="6" required>
+          <small id="passwordHelpBlock" class="form-text text-muted">
+            6자리 이상의 비밀번호를 입력하세요.
+          </small>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            올바른 비밀번호를 입력하세요.
+          </div>
+        </div>
+      </div>
+      <br>
+      <button class="btn btn-primary" type="submit" id="btnSave">회원가입</button>
+      <button class="btn btn-primary" type="button" id="btnCancle">취소</button>
+    </form>
+  </div>
+</div>
+<%- include('../footer') -%>

@@ -1,0 +1,60 @@
+<%- include('../header') -%>
+<%- include('../nav') -%>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card border-success mb-3">
+        <div class="card-header">Search</div>
+        <div class="card-body">
+          <form>
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="inputState">카테고리1</label>
+                <select class="form-control" id="sel1">
+                  <option value="">모두</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="inputState">카테고리2</label>
+                <select class="form-control" id="sel2">
+                  <option value="">모두</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="inputState">카테고리3</label>
+                <select class="form-control" id="sel3">
+                  <option value="">모두</option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 1em;">
+      <div class="row">
+        <div class="col-md-6 text-left">
+          <a class="btn btn-outline-warning" href="/category/add">카테고리 추가</a>
+        </div>
+        <div class="col-md-6 text-right">
+          <p class="read align-bottom">총 <span id="qty">0</span>건의 자료가 있습니다.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <table class="table">
+        <thead>
+          <tr class="table-info">
+            <th scope="col" class="text-center">카테고리 1</th>
+            <th scope="col" class="text-center">카테고리 2</th>
+            <th scope="col" class="text-center">카테고리 3</th>
+            <th scope="col" class="text-center">&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<%- include('../footer') -%>

@@ -1,0 +1,7 @@
+/dist/
+node_modules/
+packge-lock.json
+# Key files
+src/server/lib/keys/
+# real config file
+src/server/config.js

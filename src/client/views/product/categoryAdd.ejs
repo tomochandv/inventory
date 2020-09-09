@@ -1,0 +1,76 @@
+<%- include('../header') -%>
+<%- include('../nav') -%>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <blockquote class="blockquote text-center">
+        <p class="mb-0">첫번째 카테고리 > 두번째 카테고리 > 세번째 카테고리 순으로 종속됩니다.</p>
+        <footer class="blockquote-footer">예시: 프린트 티셔츠 > 빨간색 > 사이즈 100</footer>
+      </blockquote>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-info mb-3">
+        <div class="card-header">첫번째 카테고리 추가</div>
+        <div class="card-body">
+          <form>
+            <div class="form-group">
+              <label for="txtCate1">첫번째 카테고리 명</label>
+              <input type="text" class="form-control" id="txtCate1" aria-describedby="txtCate1Help">
+              <small id="txtCate1Help" class="form-text text-muted">처음 카테고리를 입력하실려면 명칭을 넣으시고 저장해주세요.</small>
+            </div>
+            <button type="button" class="btn btn-info" id="save1">카테고리 저장</button>
+            <div class="form-group" style="margin-top: 2em;">
+              <label for="sel1">카테고리 목록</label>
+              <select id="sel1" class="form-control"></select>
+              <small id="sel1Help" class="form-text text-muted">두번째 세번째 카테고리를 저장하실려면 선택하셔야 합니다.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-warning mb-3">
+        <div class="card-header">두번째 카테고리 추가</div>
+        <div class="card-body">
+          <form>
+            <div class="form-group">
+              <label for="txtCate2">두번째 카테고리 명</label>
+              <input type="text" class="form-control" id="txtCate2" aria-describedby="txtCate2Help">
+              <small id="txtCate2Help" class="form-text text-muted">두번째 카테고리를 입력하실려면 명칭을 넣으시고 저장해주세요.</small>
+            </div>
+            <button type="button" class="btn btn-warning" id="save2">카테고리 저장</button>
+            <div class="form-group" style="margin-top: 2em;">
+              <label for="sel2">카테고리 목록</label>
+              <select id="sel2" class="form-control"></select>
+              <small id="sel2Help" class="form-text text-muted">세번째 카테고리를 저장하실려면 선택하셔야 합니다.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-danger mb-3">
+        <div class="card-header">세번째 카테고리 추가</div>
+        <div class="card-body">
+          <form>
+            <div class="form-group">
+              <label for="txtCate3">세번째 카테고리 명</label>
+              <input type="text" class="form-control" id="txtCate3" aria-describedby="txtCate3Help">
+              <small id="txtCate3Help" class="form-text text-muted">세번째 카테고리를 입력하실려면 명칭을 넣으시고 저장해주세요.</small>
+            </div>
+            <button type="button" class="btn btn-danger" id="save3">카테고리 저장</button>
+            <div class="form-group" style="margin-top: 2em;">
+              <label for="sel3">카테고리 목록</label>
+              <select id="sel3" class="form-control"></select>
+              <small id="sel3Help" class="form-text text-muted">세번째 카테고리를 저장하실려면 선택하셔야 합니다.</small>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 text-right">
+      <a class="btn btn-outline-primary" href="/category">목록</a>
+    </div>
+  </div>
+</div>
+<%- include('../footer') -%>
