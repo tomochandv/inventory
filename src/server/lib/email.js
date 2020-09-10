@@ -9,7 +9,7 @@ const email = {
     try {
       const msg = {
         to,
-        from: 'totomung07@gmail.com',
+        from: 'totomung08@gmail.com',
         subject: '[P Inventory] 인증 메일 입니다.',
         html: `
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -169,7 +169,6 @@ const controll = {
         const caidx = common.requestGetInt(ctx, 'caidx')
         const subidx = common.requestGetInt(ctx, 'subidx')
         const botidx = common.requestGetInt(ctx, 'botidx')
-        console.log(caidx, subidx, botidx)
         const list = await db.getCategoryList(userInfo.useridx, caidx, subidx, botidx)
         payload.data = list
         payload.result = true
@@ -212,6 +211,180 @@ const controll = {
           await db.removeCategoryInfo(arrIdx[0])
           payload.result = true
           payload.message = '삭제되었습니다.'
+        }
+        payload.result = true
+      }
+    } catch (err) {
+      console.log(err)
+      payload.message = '서버 에러입니다.'
+      payload.result = false
+    }
+    ctx.body = payload.model()
+  },
+  addProducts: async (ctx) => {
+    const payload = new Payload()
+    try {
+      const userInfo = await Auth.userInfo(ctx)
+      if (userInfo === null) {
+        payload.data = 'F'
+        payload.result = false
+        payload.message = '로그인이 되지 않은 상태입니다.'
+      } else {
+        const name = common.requestPost(ctx, 'name')
+        const qty = common.requestPostInt(ctx, 'qty')
+        const desc = common.requestPost(ctx, 'desc')
+        const caidx = common.requestPostInt(ctx, 'caidx')
+        const botidx = common.requestPostInt(ctx, 'botidx')
+        const subidx = common.requestPostInt(ctx, 'subidx')
+
+        const checkInfo = await db.getProductName(userInfo.useridx, caidx, subidx, botidx, name)
+        if (checkInfo.length > 0) {
+          payload.result = false
+          payload.message = '동일한 제품이 존재 합니다.'
+        } else {
+          await db.addProduct(userInfo.useridx, caidx, subidx, botidx, name, desc, qty, 'Y')
+          // const pridx = info.insertId
+          // await db.addProductHistory(pridx, qty)
+          payload.result = true
+          payload.message = '저장 되었습니다.'
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      payload.message = '서버 에러입니다.'
+      payload.result = false
+    }
+    ctx.body = payload.model()
+  },
+  getProductList: async (ctx) => {
+    const payload = new Payload()
+    try {
+      const userInfo = await Auth.userInfo(ctx)
+      if (userInfo === null) {
+        payload.data = 'F'
+        payload.result = false
+        payload.message = '로그인이 되지 않은 상태입니다.'
+      } else {
+        const caidx = common.requestGetInt(ctx, 'caidx')
+        const subidx = common.requestGetInt(ctx, 'subidx')
+        const botidx = common.requestGetInt(ctx, 'botidx')
+        const prnm = common.requestGet(ctx, 'prnm')
+        const list = await db.getProductList(userInfo.useridx, caidx, subidx, botidx, prnm)
+        payload.data = list
+        payload.result = true
+      }
+    } catch (err) {
+      console.log(err)
+      payload.message = '서버 에러입니다.'
+      payload.result = false
+    }
+    ctx.body = payload.model()
+  },
+  removeProduct: async (ctx) => {
+    const payload = new Payload()
+    try {
+      const userInfo = await Auth.userInfo(ctx)
+      if (userInfo === null) {
+        payload.data = 'F'
+        payload.result = false
+        payload.message = '로그인이 되지 않은 상태입니다.'
+      } else {
+        const pridx = common.requestPostInt(ctx, 'pridx')
+        await db.removeProduct(pridx)
+        payload.result = true
+        payload.message = '삭제되었습니다.'
+      }
+    } catch (err) {
+      console.log(err)
+      payload.message = '서버 에러입니다.'
+      payload.result = false
+    }
+    ctx.body = payload.model()
+  },
+  productAdd: async (ctx) => {
+    const payload = new Payload()
+    try {
+      const userInfo = await Auth.userInfo(ctx)
+      if (userInfo === null) {
+        payload.data = 'F'
+        payload.result = false
+        payload.message = '로그인이 되지 않은 상태입니다.'
+      } else {
+        const pridx = common.requestPostInt(ctx, 'pridx')
+        const qty = common.requestPostInt(ctx, 'qty')
+        const price = common.requestPostInt(ctx, 'price')
+        await db.addProductHistory(pridx, qty, price)
+        await db.setProductQty(pridx, qty)
+        payload.result = true
+        payload.message = '저장 되었습니다.'
+      }
+    } catch (err) {
+      console.log(err)
+      payload.message = '서버 에러입니다.'
+      payload.result = false
+    }
+    ctx.body = payload.model()
+  },
+  getProductHistoryList: async (ctx) => {
+    const payload = new Payload()
+    try {
+      const userInfo = await Auth.userInfo(ctx)
+      if (userInfo === null) {
+        payload.data = 'F'
+        payload.result = false
+        payload.message = '로그인이 되지 않은 상태입니다.'
+      } else {
+        const caidx = common.requestGetInt(ctx, 'caidx')
+        const subidx = common.requestGetInt(ctx, 'subidx')
+        const botidx = common.requestGetInt(ctx, 'botidx')
+        const prnm = common.requestGet(ctx, 'prnm')
+        const sdate = common.requestGet(ctx, 'sdate')
+        const edate = common.requestGet(ctx, 'edate')
+        const type = common.requestGet(ctx, 'type')
+        const page = common.requestGetInt(ctx, 'page')
+        const perPage = common.requestGetInt(ctx, 'perPage')
+        const start = (page - 1) * perPage
+
+        const list = await db.getProductHistoryList(start, perPage, userInfo.useridx, type, caidx, subidx, botidx, prnm, sdate, edate)
+        const total = await db.getProductHistoryListCount(userInfo.useridx, type, caidx, subidx, botidx, prnm, sdate, edate)
+        payload.data = {
+          list,
+          total: total[0].total,
+        }
+        payload.result = true
+      }
+    } catch (err) {
+      console.log(err)
+      payload.message = '서버 에러입니다.'
+      payload.result = false
+    }
+    ctx.body = payload.model()
+  },
+  getStaticList: async (ctx) => {
+    const payload = new Payload()
+    try {
+      const userInfo = await Auth.userInfo(ctx)
+      if (userInfo === null) {
+        payload.data = 'F'
+        payload.result = false
+        payload.message = '로그인이 되지 않은 상태입니다.'
+      } else {
+        const caidx = common.requestGetInt(ctx, 'caidx')
+        const subidx = common.requestGetInt(ctx, 'subidx')
+        const botidx = common.requestGetInt(ctx, 'botidx')
+        const prnm = common.requestGet(ctx, 'prnm')
+        const sdate = common.requestGet(ctx, 'sdate')
+        const edate = common.requestGet(ctx, 'edate')
+        const type = common.requestGet(ctx, 'type')
+        const page = common.requestGetInt(ctx, 'page')
+        const perPage = common.requestGetInt(ctx, 'perPage')
+        const start = (page - 1) * perPage
+
+        const list = await db.getProductStaticList(start, perPage, userInfo.useridx, type, caidx, subidx, botidx, prnm, sdate, edate)
+        const total = await db.getProductStaticListCount(userInfo.useridx, type, caidx, subidx, botidx, prnm, sdate, edate)
+        payload.data = {
+          list,
+          total: total[0].total,
         }
         payload.result = true
       }

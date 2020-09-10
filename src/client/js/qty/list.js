@@ -1,5 +1,5 @@
 /**
- * @output product/productList.min
+ * @output qty/list.min
  */
 import $ from 'jquery'
 import 'bootstrap'
@@ -58,31 +58,29 @@ const selec3Bind = async () => {
   }
 }
 
-const deleteProduct = async (e) => {
-  const will = await swal({
-    title: '진짜 삭제 하실거에요?',
-    text: '삭제 하시면 복구가 불가능 합니다.',
-    icon: 'warning',
-    buttons: ['취소', '진짜 삭제!'],
-    dangerMode: true,
+const updateQty = async (e) => {
+  const target = e.target
+  const pridx = target.value
+  const qtyElement = target.parentElement.parentElement.children[5].children[0]
+  const priceelement = target.parentElement.parentElement.children[6].children[0]
+  const info = await loginAxios.post('qty/add', {
+    pridx,
+    qty: qtyElement.value,
+    price: priceelement.value,
   })
-  if (will) {
-    const idx = e.target.value
-    const info = await loginAxios.post('product/remove', { pridx: idx })
-    const datas = await retunData(info)
-    if (datas.data.result) {
-      swal('성공', datas.data.message, 'success')
-      // eslint-disable-next-line no-use-before-define
-      await tableBind()
-    } else {
-      swal('Oops.....', datas.data.message, 'error')
-    }
+  const datas = await retunData(info)
+  if (datas.data.result) {
+    swal('성공', datas.data.message, 'success')
+    // eslint-disable-next-line no-use-before-define
+    await tableBind()
+  } else {
+    swal('Oops.....', datas.data.message, 'error')
   }
 }
 
-const deleteBind = () => {
-  document.querySelectorAll('[name=delete]').forEach((node) => {
-    node.addEventListener('click', deleteProduct)
+const updateBind = () => {
+  document.querySelectorAll('[name=update]').forEach((node) => {
+    node.addEventListener('click', updateQty)
   })
 }
 
@@ -97,21 +95,23 @@ const tableBind = async () => {
       datas.data.data.forEach((item) => {
         html += `<tr>
           <td scope="row" class="text-center">${item.pridx}</td>
-          <td class="text-center">${item.ca_nm}</td>
-          <td class="text-center">${item.sub_nm}</td>
-          <td class="text-center">${item.bot_nm}</td>
+          <td class="text-center">${item.ca_nm} > ${item.sub_nm} > ${item.bot_nm}</td>
           <td class="text-center">${item.pr_nm}</td>
+          <td class="text-center">${item.pr_desc}</td>
+          <td class="text-center">${item.qty}</td>
+          <td class="text-center"><input class="form-control form-control-sm" type="number" name="txtQty"></td>
+          <td class="text-center"><input class="form-control form-control-sm" type="number" name="txtPrice"></td>
           <td class="text-center">
-            <button name="delete" type="button" class="btn btn-outline-danger" value="${item.pridx}">삭제</button>
+            <button name="update" type="button" class="btn btn-outline-info" value="${item.pridx}">저장</button>
           </td>
         </tr>`
       })
     } else {
-      html = '<tr><td class="text-center" colspan="6">No Data.</td></tr>'
+      html = '<tr><td class="text-center" colspan="8">No Data.</td></tr>'
     }
     $('tbody > tr').remove()
     $('tbody').append(html)
-    deleteBind()
+    updateBind()
   }
 }
 
