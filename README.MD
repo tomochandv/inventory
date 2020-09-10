@@ -17,7 +17,7 @@ Nodejs와 mysql로 이루어져 있습니다.
  - public: rsa 암호화를 위한 공개키
  - recaptch: 리캡차 V3를 하기위한 시크릿키
  - tokenKey: token을 생성 할때 사용하는 128bit의 문자키
- 
+
 ### Local환경에서 테스트
 사전에 config.js 파일의 디비 연결 문자열을 변경하세요.
 nodemon 과 webpack의 watch 모드가 동작합니다.

@@ -1,17 +1,32 @@
 /**
- * @output product/productList.min
+ * @output qty/history.min
  */
 import $ from 'jquery'
 import 'bootstrap'
 import 'popper.js'
+import flatpickr from 'flatpickr'
+import { Korean } from 'flatpickr/dist/l10n/ko'
+import 'flatpickr/dist/themes/confetti.css'
+import moment from 'moment'
 import swal from 'sweetalert'
 import { loginAxios, retunData } from '../lib/axios'
 import '../lib/navbar'
+import Pager from '../lib/pager'
 
+const perPage = 20
 const sel1 = document.querySelector('#sel1')
 const sel2 = document.querySelector('#sel2')
 const sel3 = document.querySelector('#sel3')
 const name = document.querySelector('#name')
+const type = document.querySelector('#selType')
+const sdate = document.querySelector('#sdate')
+const pagerElement = document.querySelector('#pagenation')
+
+const duration = flatpickr(sdate, {
+  locale: Korean,
+  dateFormat: 'Y-m-d',
+  mode: 'range',
+})
 
 const selec1Bind = async () => {
   const info = await loginAxios.get('category/1')
@@ -58,60 +73,52 @@ const selec3Bind = async () => {
   }
 }
 
-const deleteProduct = async (e) => {
-  const will = await swal({
-    title: '진짜 삭제 하실거에요?',
-    text: '삭제 하시면 복구가 불가능 합니다.',
-    icon: 'warning',
-    buttons: ['취소', '진짜 삭제!'],
-    dangerMode: true,
-  })
-  if (will) {
-    const idx = e.target.value
-    const info = await loginAxios.post('product/remove', { pridx: idx })
-    const datas = await retunData(info)
-    if (datas.data.result) {
-      swal('성공', datas.data.message, 'success')
-      // eslint-disable-next-line no-use-before-define
-      await tableBind()
-    } else {
-      swal('Oops.....', datas.data.message, 'error')
-    }
-  }
+const pageClick = async (page) => {
+  // eslint-disable-next-line no-use-before-define
+  tableBind(page)
 }
 
-const deleteBind = () => {
-  document.querySelectorAll('[name=delete]').forEach((node) => {
-    node.addEventListener('click', deleteProduct)
-  })
+const createPager = async (curpage, total) => {
+  const pager = new Pager(pagerElement, total, perPage, pageClick)
+  pager.bind(curpage)
 }
 
-const tableBind = async () => {
-  const url = `product/list?caidx=${sel1.value}&botidx=${sel3.value}&subidx=${sel2.value}&prnm=${name.value}`
-  const info = await loginAxios.get(url)
+const tableBind = async (page) => {
+  const info = await loginAxios.get('qty/history/list', {
+    params: {
+      page,
+      perPage,
+      caidx: sel1.value,
+      subidx: sel2.value,
+      botidx: sel3.value,
+      prnm: name.value,
+      type: type.value,
+      sdate: duration.selectedDates.length === 0 ? '' : moment(duration.selectedDates[0]).format('YYYY-MM-DD'),
+      edate: duration.selectedDates.length === 0 ? '' : moment(duration.selectedDates[1]).format('YYYY-MM-DD'),
+    },
+  })
   const datas = await retunData(info)
   if (datas.data.result) {
-    document.querySelector('#qty').innerHTML = datas.data.data.length
+    document.querySelector('#qty').innerHTML = datas.data.data.total
+    createPager(page, datas.data.data.total)
     let html = ''
-    if (datas.data.data.length > 0) {
-      datas.data.data.forEach((item) => {
+    if (datas.data.data.list.length > 0) {
+      datas.data.data.list.forEach((item) => {
         html += `<tr>
           <td scope="row" class="text-center">${item.pridx}</td>
-          <td class="text-center">${item.ca_nm}</td>
-          <td class="text-center">${item.sub_nm}</td>
-          <td class="text-center">${item.bot_nm}</td>
+          <td class="text-center">${item.ca_nm} > ${item.sub_nm} > ${item.bot_nm}</td>
           <td class="text-center">${item.pr_nm}</td>
-          <td class="text-center">
-            <button name="delete" type="button" class="btn btn-outline-danger" value="${item.pridx}">삭제</button>
-          </td>
+          <td class="text-center">${item.pr_desc}</td>
+          <td class="text-center">${item.qty}</td>
+          <td class="text-center">${item.price}</td>
+          <td class="text-center">${moment(item.regdate).format('YYYY-MM-DD HH:mm:ss')}</td>
         </tr>`
       })
     } else {
-      html = '<tr><td class="text-center" colspan="6">No Data.</td></tr>'
+      html = '<tr><td class="text-center" colspan="7">No Data.</td></tr>'
     }
     $('tbody > tr').remove()
     $('tbody').append(html)
-    deleteBind()
   }
 }
 
@@ -119,18 +126,16 @@ const init = async () => {
   await selec1Bind()
   await selec2Bind()
   await selec3Bind()
-  await tableBind()
+  await tableBind(1)
 }
-
 init()
-
 sel1.addEventListener('change', async () => {
   await selec2Bind()
   await selec3Bind()
 })
-
 sel2.addEventListener('change', async () => {
   await selec3Bind()
 })
-
-document.querySelector('#search').addEventListener('click', tableBind)
+document.querySelector('#search').addEventListener('click', () => {
+  tableBind(1)
+})

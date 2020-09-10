@@ -74,7 +74,7 @@ loginAxios.interceptors.response.use((response) => {
 // eslint-disable-next-line consistent-return
 const retunData = async (data) => {
   try {
-    if (data.result === false && data.data === 'F') {
+    if (data.data.result === false && data.data.data === 'F') {
       const info = await swal('로그인 필요!', '로그인을 해주세요.', 'info')
       if (info) {
         window.location.href = '/login'

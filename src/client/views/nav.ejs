@@ -10,11 +10,24 @@
       <li class="nav-item active">
         <a class="nav-link" href="/">Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/category">카테고리 관리</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          기초공사
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/category">카테고리 관리</a>
+          <a class="dropdown-item" href="/product">제품관리</a>
+        </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/product">제품관리</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          매입/매출 관리
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/qty">수량 관리</a>
+          <a class="dropdown-item" href="/qty/history">매입/매출 조회</a>
+          <a class="dropdown-item" href="/static">통계</a>
+        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/update">사용설명서/업데이트</a>

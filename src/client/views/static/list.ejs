@@ -4,9 +4,23 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card border-success mb-3">
-        <div class="card-header">Search</div>
+        <div class="card-header">통계 검색</div>
         <div class="card-body">
           <form>
+            <div class="form-row">
+              <div class="form-group col-md-3">
+                <label for="inputState">구분</label>
+                <select class="form-control" id="selType">
+                  <option value="">모두</option>
+                  <option value=">">매입</option>
+                  <option value="<">매출</option>
+                </select>
+              </div>
+              <div class="form-group col-md-3">
+                <label for="name">기간</label>
+                <input type="text" class="form-control" id="sdate">
+              </div>
+            </div>
             <div class="form-row">
               <div class="form-group col-md-3">
                 <label for="inputState">카테고리1</label>
@@ -36,32 +50,28 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12" style="margin-bottom: 1em;">
-      <div class="row">
-        <div class="col-md-6 text-left">
-          <a class="btn btn-outline-warning" href="/product/add">제품 추가</a>
-        </div>
-        <div class="col-md-6 text-right">
-          <p class="read align-bottom">총 <span id="qty">0</span>건의 자료가 있습니다.</p>
-        </div>
-      </div>
+    <div class="col-md-12 text-right" style="margin-bottom: 1em;">
+      <p class="read align-bottom">총 <span id="qty">0</span>건의 자료가 있습니다.</p>
     </div>
     <div class="col-md-12">
       <table class="table">
         <thead>
           <tr class="table-info">
-            <th scope="col" class="text-center">제품 아이디</th>
-            <th scope="col" class="text-center">카테고리 1</th>
-            <th scope="col" class="text-center">카테고리 2</th>
-            <th scope="col" class="text-center">카테고리 3</th>
+            <th scope="col" class="text-center">ID</th>
+            <th scope="col" class="text-center">카테고리</th>
             <th scope="col" class="text-center">제품명</th>
             <th scope="col" class="text-center">비고</th>
-            <th scope="col" class="text-center">&nbsp;</th>
+            <th scope="col" class="text-center">총 수량</th>
+            <th scope="col" class="text-center">총 가격</th>
           </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
+    </div>
+    <div class="col-md-12 text-xs-center">
+      <ul class="pagination justify-content-center" id="pagenation">
+      </ul>
     </div>
   </div>
 </div>

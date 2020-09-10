@@ -12,4 +12,14 @@ if (url.indexOf('category') !== -1) {
     item.classList.remove('active')
   })
   items[1].classList.add('active')
+} else if (url.indexOf('product') !== -1) {
+  items.forEach((item) => {
+    item.classList.remove('active')
+  })
+  items[1].classList.add('active')
+} else if (url.indexOf('qty') !== -1) {
+  items.forEach((item) => {
+    item.classList.remove('active')
+  })
+  items[2].classList.add('active')
 }

@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="card border-success mb-3">
-        <div class="card-header">Search</div>
+        <div class="card-header">수량관리 검색</div>
         <div class="card-body">
           <form>
             <div class="form-row">
@@ -36,26 +36,34 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12" style="margin-bottom: 1em;">
-      <div class="row">
-        <div class="col-md-6 text-left">
-          <a class="btn btn-outline-warning" href="/product/add">제품 추가</a>
-        </div>
-        <div class="col-md-6 text-right">
-          <p class="read align-bottom">총 <span id="qty">0</span>건의 자료가 있습니다.</p>
-        </div>
-      </div>
+    <div class="col-md-12 text-right" style="margin-bottom: 1em;">
+      <p class="read align-bottom">총 <span id="qty">0</span>건의 자료가 있습니다.</p>
     </div>
     <div class="col-md-12">
+      <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+        <p>
+          매출시에는 수량을 음수로 입력 하시면 됩니다. (ex: -100)
+          <br>매입은 양수로 입력하세요. (ex: 100)<br>
+          매입, 매출 가격까지 하실려면 개당 가격을 입력하시면 됩니다.<br>
+          1)개당 500원 제품을 100개 매입 -> 수량 : 100, 가격: 500<br>
+          2)개당 1000원에 100개 매출 -> 수량: -100, 가격: 1000<br>
+  
+        </p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
       <table class="table">
         <thead>
           <tr class="table-info">
-            <th scope="col" class="text-center">제품 아이디</th>
-            <th scope="col" class="text-center">카테고리 1</th>
-            <th scope="col" class="text-center">카테고리 2</th>
-            <th scope="col" class="text-center">카테고리 3</th>
+            <th scope="col" class="text-center">ID</th>
+            <th scope="col" class="text-center">카테고리</th>
             <th scope="col" class="text-center">제품명</th>
             <th scope="col" class="text-center">비고</th>
+            <th scope="col" class="text-center">현재 수량</th>
+            <th scope="col" class="text-center">수량</th>
+            <th scope="col" class="text-center">매입/매출 가격</th>
             <th scope="col" class="text-center">&nbsp;</th>
           </tr>
         </thead>

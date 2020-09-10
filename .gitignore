@@ -5,3 +5,4 @@ packge-lock.json
 src/server/lib/keys/
 # real config file
 src/server/config.js
+src/client/js/lib/keys/
