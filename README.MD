@@ -25,9 +25,11 @@ nodemon 과 webpack의 watch 모드가 동작합니다.
 npm run local
 ```
  ### 배포
+ server/config.js 파일을 config.sample,js 파일 처럼 생성 후,
  ```sh
 npm run build
 ```
+dist 폴더의 server/lib/keys에 키파일들을 복사.
 후에 dist 폴더를 배포합니다.
 ``` dist/server/index.js``` 파일을 구동 시키면 됩니다.
 
