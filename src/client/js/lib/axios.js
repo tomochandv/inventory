@@ -6,7 +6,7 @@ console.log(process.env.NODE_ENV)
 const config = {
   backendUrl: {
     local: 'http://localhost:4010',
-    staging: 'http://127.0.0.1:5002',
+    staging: 'https://inventory.loah.club',
   },
 }
 
