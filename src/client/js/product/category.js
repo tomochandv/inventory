@@ -86,6 +86,13 @@ const listBind = async () => {
   }
 }
 
+const deleteBind = () => {
+  document.querySelectorAll('[name=delete]').forEach((node) => {
+    // eslint-disable-next-line no-use-before-define
+    node.addEventListener('click', deleteCategory)
+  })
+}
+
 const deleteCategory = async (e) => {
   const idx = e.target.value
   const info = await loginAxios.post('category/remove', { idx })
@@ -97,12 +104,6 @@ const deleteCategory = async (e) => {
   } else {
     swal('Oops.....', datas.data.message, 'error')
   }
-}
-
-const deleteBind = () => {
-  document.querySelectorAll('[name=delete]').forEach((node) => {
-    node.addEventListener('click', deleteCategory)
-  })
 }
 
 const init = async () => {

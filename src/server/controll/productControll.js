@@ -325,6 +325,53 @@ const controll = {
     }
     ctx.body = payload.model()
   },
+  getProductDetail: async (ctx) => {
+    const payload = new Payload()
+    try {
+      const userInfo = await Auth.userInfo(ctx)
+      if (userInfo === null) {
+        payload.data = 'F'
+        payload.result = false
+        payload.message = '로그인이 되지 않은 상태입니다.'
+      } else {
+        const pridx = common.requestGetInt(ctx, 'pridx')
+        const list = await db.getProductDetail(userInfo.useridx, pridx)
+        payload.data = list
+        payload.result = true
+      }
+    } catch (err) {
+      console.log(err)
+      payload.message = '서버 에러입니다.'
+      payload.result = false
+    }
+    ctx.body = payload.model()
+  },
+  editProduct: async (ctx) => {
+    const payload = new Payload()
+    try {
+      const userInfo = await Auth.userInfo(ctx)
+      if (userInfo === null) {
+        payload.data = 'F'
+        payload.result = false
+        payload.message = '로그인이 되지 않은 상태입니다.'
+      } else {
+        const pridx = common.requestPostInt(ctx, 'pridx')
+        const caidx = common.requestPostInt(ctx, 'caidx')
+        const subidx = common.requestPostInt(ctx, 'subidx')
+        const botidx = common.requestPostInt(ctx, 'botidx')
+        const prnm = common.requestPost(ctx, 'name')
+        const desc = common.requestPost(ctx, 'desc')
+        await db.setProduct(userInfo.useridx, pridx, caidx, subidx, botidx, prnm, desc)
+        payload.result = true
+        payload.message = '수정 되었습니다.'
+      }
+    } catch (err) {
+      console.log(err)
+      payload.message = '서버 에러입니다.'
+      payload.result = false
+    }
+    ctx.body = payload.model()
+  },
   getProductHistoryList: async (ctx) => {
     const payload = new Payload()
     try {

@@ -214,6 +214,37 @@ const db = {
       throw err
     }
   },
+  getProductDetail: async (useridx, pridx) => {
+    try {
+      const qry = `SELECT 
+          a.pridx, a.caidx, a.subidx, a.botidx, a.useridx, a.qty, b.ca_nm, c.sub_nm, d.bot_nm, a.pr_nm, a.pr_desc
+        FROM products_info a
+        INNER JOIN category_info b ON a.caidx = b.caidx
+        INNER JOIN category_depth1 c ON a.subidx = c.subidx
+        INNER JOIN category_depth2 d ON a.botidx = d.botidx
+        WHERE a.useridx = ${useridx} and a.pridx = ${pridx}`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  setProduct: async (useridx, pridx, caidx, subidx, botidx, prnm, desc) => {
+    try {
+      const qry = `UPDATE products_info
+      SET
+          caidx = ${caidx},
+          subidx = ${subidx},
+          botidx = ${botidx},
+          pr_nm = '${prnm}', 
+          pr_desc = '${desc}'
+      WHERE pridx = ${pridx} and useridx = ${useridx}`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
   removeProduct: async (pridx) => {
     try {
       let qry = `DELETE FROM products_history WHERE pridx = ${pridx}`

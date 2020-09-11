@@ -49,7 +49,6 @@ const selec2Bind = async () => {
 }
 
 const selec3Bind = async () => {
-  console.log(1)
   const info = await loginAxios.get(`category/3?subidx=${sel2.value}`)
   const datas = await retunData(info)
   if (datas.data.result) {

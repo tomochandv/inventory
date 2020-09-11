@@ -1,5 +1,6 @@
 import Router from 'koa-router'
 import controll from '../controll/productControll'
+import Common from '../lib/common'
 
 const router = new Router()
 
@@ -12,7 +13,8 @@ router.get('/category/add', async (ctx) => {
 })
 
 router.get('/product/add', async (ctx) => {
-  await ctx.render('product/product', { script: 'product/product' })
+  const pridx = new Common().requestGetInt(ctx, 'pridx')
+  await ctx.render('product/product', { script: 'product/product', pridx })
 })
 
 router.get('/product', async (ctx) => {
@@ -43,6 +45,8 @@ router.post('/category/remove', controll.removeCategory)
 
 router.post('/product/add', controll.addProducts)
 router.get('/product/list', controll.getProductList)
+router.get('/product/detail', controll.getProductDetail)
+router.post('/product/edit', controll.editProduct)
 router.post('/product/remove', controll.removeProduct)
 
 router.post('/qty/add', controll.productAdd)

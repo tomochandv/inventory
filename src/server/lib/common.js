@@ -75,6 +75,8 @@ class Common {
     try {
       if (this.ctx.request.query[this.name] !== undefined && Number.isNaN(this.ctx.request.query[this.name]) === false) {
         this.txt = Number(ctx.request.query[this.name])
+      } else {
+        this.txt = 0
       }
     } catch (err) {
       this.txt = 0
