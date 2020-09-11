@@ -58,9 +58,24 @@ if (url.indexOf('category') !== -1) {
     item.classList.remove('active')
   })
   items[1].classList.add('active')
+} else if (url.indexOf('corporation') !== -1) {
+  items.forEach((item) => {
+    item.classList.remove('active')
+  })
+  items[1].classList.add('active')
 } else if (url.indexOf('qty') !== -1) {
   items.forEach((item) => {
     item.classList.remove('active')
   })
   items[2].classList.add('active')
+} else if (url.indexOf('static') !== -1) {
+  items.forEach((item) => {
+    item.classList.remove('active')
+  })
+  items[3].classList.add('active')
+} else if (url.indexOf('update') !== -1) {
+  items.forEach((item) => {
+    item.classList.remove('active')
+  })
+  items[4].classList.add('active')
 }

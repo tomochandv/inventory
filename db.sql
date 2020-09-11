@@ -101,6 +101,26 @@ ALTER TABLE products_info
 
 
 -- user_info Table Create SQL
+CREATE TABLE co_info
+(
+    `coidx`    INT             NOT NULL    AUTO_INCREMENT COMMENT '업체아이디', 
+    `useridx`  INT             NOT NULL    COMMENT '회원아이디', 
+    `regdate`  DATETIME        NOT NULL    COMMENT '등록일', 
+    `co_nm`    VARCHAR(100)    NOT NULL    COMMENT '업체명', 
+    `co_tell`  VARCHAR(20)     NULL        COMMENT '업체 전번', 
+    `co_addr`  VARCHAR(200)    NULL        COMMENT '업체 주소', 
+    `zip`      VARCHAR(10)     NULL        COMMENT '우편번호', 
+    PRIMARY KEY (coidx)
+);
+
+ALTER TABLE co_info COMMENT '매입 업체';
+
+ALTER TABLE co_info
+    ADD CONSTRAINT FK_co_info_useridx_user_info_useridx FOREIGN KEY (useridx)
+        REFERENCES user_info (useridx) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- user_info Table Create SQL
 CREATE TABLE products_history
 (
     `pridx`    INT         NOT NULL    COMMENT '물품아이디', 
@@ -183,5 +203,37 @@ CREATE TABLE user_login
 );
 
 ALTER TABLE user_login COMMENT '로그인기록';
+
+
+-- user_info Table Create SQL
+CREATE TABLE main_notice
+(
+    `idx`       INT             NOT NULL    AUTO_INCREMENT COMMENT '기본키', 
+    `contents`  VARCHAR(500)    NOT NULL    COMMENT '내용', 
+    `use_yn`    VARCHAR(1)      NOT NULL    COMMENT '사용여부', 
+    `regdate`   DATETIME        NOT NULL    COMMENT '등록일', 
+    PRIMARY KEY (idx)
+);
+
+ALTER TABLE main_notice COMMENT '메인 공지';
+
+
+-- user_info Table Create SQL
+CREATE TABLE products_co
+(
+    `pridx`  INT    NOT NULL    COMMENT '물품아이디', 
+    `coidx`  INT    NOT NULL    COMMENT '업체아이디', 
+    PRIMARY KEY (pridx, coidx)
+);
+
+ALTER TABLE products_co COMMENT '물품마스터 매입업체 관계';
+
+ALTER TABLE products_co
+    ADD CONSTRAINT FK_products_co_pridx_products_info_pridx FOREIGN KEY (pridx)
+        REFERENCES products_info (pridx) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE products_co
+    ADD CONSTRAINT FK_products_co_coidx_co_info_coidx FOREIGN KEY (coidx)
+        REFERENCES co_info (coidx) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 

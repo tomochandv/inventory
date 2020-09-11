@@ -192,10 +192,13 @@ const db = {
     try {
       let qry = `SELECT 
           a.pridx, a.caidx, a.subidx, a.botidx, a.useridx, a.qty, b.ca_nm, c.sub_nm, d.bot_nm, a.pr_nm, a.pr_desc
+          , IFNULL(co.coidx, 0) AS coidx, IFNULL(co.co_nm, '없음') AS co_nm
         FROM products_info a
         INNER JOIN category_info b ON a.caidx = b.caidx
         INNER JOIN category_depth1 c ON a.subidx = c.subidx
         INNER JOIN category_depth2 d ON a.botidx = d.botidx
+        LEFT OUTER JOIN products_co pco ON a.pridx = pco.pridx
+        LEFT OUTER JOIN co_info co ON pco.coidx = co.coidx
         WHERE a.useridx = ${useridx}
           AND a.pr_desc LIKE '%${prnm}%'`
       if (caidx !== 0) {
@@ -218,10 +221,13 @@ const db = {
     try {
       const qry = `SELECT 
           a.pridx, a.caidx, a.subidx, a.botidx, a.useridx, a.qty, b.ca_nm, c.sub_nm, d.bot_nm, a.pr_nm, a.pr_desc
+          , IFNULL(co.coidx, 0) AS coidx, IFNULL(co.co_nm, '없음') AS co_nm
         FROM products_info a
         INNER JOIN category_info b ON a.caidx = b.caidx
         INNER JOIN category_depth1 c ON a.subidx = c.subidx
         INNER JOIN category_depth2 d ON a.botidx = d.botidx
+        LEFT OUTER JOIN products_co pco ON a.pridx = pco.pridx
+        LEFT OUTER JOIN co_info co ON pco.coidx = co.coidx
         WHERE a.useridx = ${useridx} and a.pridx = ${pridx}`
       const rows = await mysql.query(qry)
       return rows
@@ -249,6 +255,8 @@ const db = {
     try {
       let qry = `DELETE FROM products_history WHERE pridx = ${pridx}`
       await mysql.query(qry)
+      qry = `DELETE FROM products_co WHERE pridx = ${pridx}`
+      await mysql.query(qry)
       qry = `DELETE FROM products_info WHERE pridx = ${pridx}`
       const rows = await mysql.query(qry)
       return rows
@@ -256,16 +264,19 @@ const db = {
       throw err
     }
   },
-  getProductHistoryList: async (start, offlimit, useridx, type, caidx, subidx, botidx, prnm, sdate, edate) => {
+  getProductHistoryList: async (start, offlimit, useridx, type, caidx, subidx, botidx, coidx, prnm, sdate, edate) => {
     try {
       let qry = `SELECT 
           c1.ca_nm, c2.sub_nm, c3.bot_nm, pr.pr_nm, pr.pr_desc
           , a.pridx, a.qty, a.price, a.regdate
+          , IFNULL(co.coidx, 0) AS coidx, IFNULL(co.co_nm, '없음') AS co_nm
         FROM products_history a
         INNER JOIN products_info pr ON a.pridx = pr.pridx
         INNER JOIN category_info c1 ON pr.caidx = c1.caidx
         INNER JOIN category_depth1 c2 ON pr.subidx = c2.subidx
         INNER JOIN category_depth2 c3 ON pr.botidx = c3.botidx
+        LEFT OUTER JOIN products_co pco ON a.pridx = pco.pridx
+        LEFT OUTER JOIN co_info co ON pco.coidx = co.coidx
         WHERE pr.useridx = ${useridx}
           AND pr.pr_desc LIKE '%${prnm}%'`
       if (caidx !== 0) {
@@ -278,24 +289,30 @@ const db = {
         qry += ` AND pr.botidx = ${botidx}`
       }
       if (sdate !== '') {
-        qry += `AND a.regdate BETWEEN '${sdate} 00:00:00' AND '${edate} 23:59:59'`
+        qry += ` AND a.regdate BETWEEN '${sdate} 00:00:00' AND '${edate} 23:59:59'`
       }
       if (type !== '') {
-        qry += `AND a.qty ${type} 0`
+        qry += ` AND a.qty ${type} 0`
+      }
+      if (coidx !== 0) {
+        qry += ` AND pco.coidx = ${coidx}`
       }
       qry += ` ORDER BY a.regdate desc limit ${start}, ${offlimit}`
+
       const rows = await mysql.query(qry)
       return rows
     } catch (err) {
       throw err
     }
   },
-  getProductHistoryListCount: async (useridx, type, caidx, subidx, botidx, prnm, sdate, edate) => {
+  getProductHistoryListCount: async (useridx, type, caidx, subidx, botidx, coidx, prnm, sdate, edate) => {
     try {
       let qry = `SELECT 
         COUNT(1) AS total
         FROM products_history a
         INNER JOIN products_info pr ON a.pridx = pr.pridx
+        LEFT OUTER JOIN products_co pco ON a.pridx = pco.pridx
+        LEFT OUTER JOIN co_info co ON pco.coidx = co.coidx
         WHERE pr.useridx = ${useridx}
           AND pr.pr_desc LIKE '%${prnm}%'`
       if (caidx !== 0) {
@@ -308,11 +325,15 @@ const db = {
         qry += ` AND pr.botidx = ${botidx}`
       }
       if (sdate !== '') {
-        qry += `AND a.regdate BETWEEN '${sdate} 00:00:00' AND '${edate} 23:59:59'`
+        qry += ` AND a.regdate BETWEEN '${sdate} 00:00:00' AND '${edate} 23:59:59'`
       }
       if (type !== '') {
-        qry += `AND a.qty ${type} 0`
+        qry += ` AND a.qty ${type} 0`
       }
+      if (coidx !== 0) {
+        qry += ` AND pco.coidx = ${coidx}`
+      }
+
       const rows = await mysql.query(qry)
       return rows
     } catch (err) {
@@ -381,6 +402,102 @@ const db = {
         qry += `AND a.qty ${type} 0`
       }
       qry += ' GROUP BY c1.ca_nm, c2.sub_nm, c3.bot_nm, pr.pr_nm, pr.pr_desc'
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  addCoporation: async (useridx, name, tell, addr, zip) => {
+    try {
+      const qry = `INSERT INTO co_info(useridx, regdate, co_nm, co_tell, co_addr, zip)
+        VALUES(${useridx}, NOW(), '${name}', '${tell}', '${addr}', '${zip}')`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  addCoPr: async (pridx, coidx) => {
+    try {
+      const qry = `INSERT INTO products_co(pridx, coidx)
+        VALUES(${pridx}, ${coidx})`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  removeCoPr: async (pridx) => {
+    try {
+      const qry = `delete from products_co where pridx = ${pridx}`
+      console.log(qry)
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  getCoprByCoidx: async (coidx) => {
+    try {
+      const qry = `select * from products_co where coidx = ${coidx}`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  getCoprByPridx: async (pridx) => {
+    try {
+      const qry = `select * from products_co where pridx = ${pridx}`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  setCoporation: async (useridx, coidx, name, tell, addr, zip) => {
+    try {
+      const qry = `update co_info set co_nm = '${name}', co_tell = '${tell}', co_addr = '${addr}', zip = '${zip}'
+        where useridx = ${useridx} and coidx = ${coidx}`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  removeCoporation: async (useridx, coidx) => {
+    try {
+      const qry = `delete from co_info
+        where useridx = ${useridx} and coidx = ${coidx}`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  getCoporationDetail: async (coidx, useridx) => {
+    try {
+      const qry = `SELECT * FROM co_info where useridx = ${useridx} and coidx = ${coidx}`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  getCoporationList: async (start, row, useridx, name) => {
+    try {
+      const qry = `SELECT * FROM co_info where useridx = ${useridx} and co_nm like '%${name}%' order by co_nm asc
+       limit ${start}, ${row}`
+      const rows = await mysql.query(qry)
+      return rows
+    } catch (err) {
+      throw err
+    }
+  },
+  getCoporationCount: async (useridx, name) => {
+    try {
+      const qry = `SELECT count(1) as total FROM co_info where useridx = ${useridx} and co_nm like '%${name}%'`
       const rows = await mysql.query(qry)
       return rows
     } catch (err) {

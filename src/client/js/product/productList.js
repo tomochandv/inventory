@@ -100,6 +100,7 @@ const tableBind = async () => {
           <td class="text-center">${item.ca_nm}</td>
           <td class="text-center">${item.sub_nm}</td>
           <td class="text-center">${item.bot_nm}</td>
+          <td class="text-center">${item.co_nm}</td>
           <td class="text-center">${item.pr_nm}</td>
           <td class="text-center">
             <button name="delete" type="button" class="btn btn-outline-danger" value="${item.pridx}">삭제</button>

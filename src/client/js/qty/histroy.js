@@ -8,6 +8,7 @@ import flatpickr from 'flatpickr'
 import { Korean } from 'flatpickr/dist/l10n/ko'
 import 'flatpickr/dist/themes/confetti.css'
 import moment from 'moment'
+import numeral from 'numeral'
 import swal from 'sweetalert'
 import { loginAxios, retunData } from '../lib/axios'
 import '../lib/navbar'
@@ -17,6 +18,7 @@ const perPage = 20
 const sel1 = document.querySelector('#sel1')
 const sel2 = document.querySelector('#sel2')
 const sel3 = document.querySelector('#sel3')
+const selCo = document.querySelector('#selCo')
 const name = document.querySelector('#name')
 const type = document.querySelector('#selType')
 const sdate = document.querySelector('#sdate')
@@ -73,6 +75,21 @@ const selec3Bind = async () => {
   }
 }
 
+const selCoBind = async () => {
+  const info = await loginAxios.get('corporation/list?page=1&perPage=999999&name=')
+  const datas = await retunData(info)
+  if (datas.data.result) {
+    $(selCo).children('option').remove()
+    $(selCo).append('<option value="">모두</option>')
+    datas.data.data.list.forEach((element) => {
+      const html = `<option value="${element.coidx}">${element.co_nm}</option>`
+      $(selCo).append(html)
+    })
+  } else {
+    swal('Oops.....', datas.data.message, 'error')
+  }
+}
+
 const pageClick = async (page) => {
   // eslint-disable-next-line no-use-before-define
   tableBind(page)
@@ -91,6 +108,7 @@ const tableBind = async (page) => {
       caidx: sel1.value,
       subidx: sel2.value,
       botidx: sel3.value,
+      coidx: selCo.value,
       prnm: name.value,
       type: type.value,
       sdate: duration.selectedDates.length === 0 ? '' : moment(duration.selectedDates[0]).format('YYYY-MM-DD'),
@@ -106,11 +124,12 @@ const tableBind = async (page) => {
       datas.data.data.list.forEach((item) => {
         html += `<tr>
           <td scope="row" class="text-center">${item.pridx}</td>
+          <td class="text-center">${item.co_nm}</td>
           <td class="text-center">${item.ca_nm} > ${item.sub_nm} > ${item.bot_nm}</td>
           <td class="text-center">${item.pr_nm}</td>
           <td class="text-center">${item.pr_desc}</td>
-          <td class="text-center">${item.qty}</td>
-          <td class="text-center">${item.price}</td>
+          <td class="text-center">${numeral(item.qty).format('0,0')}</td>
+          <td class="text-center">${numeral(item.price).format('0,0')}</td>
           <td class="text-center">${moment(item.regdate).format('YYYY-MM-DD HH:mm:ss')}</td>
         </tr>`
       })
@@ -123,6 +142,7 @@ const tableBind = async (page) => {
 }
 
 const init = async () => {
+  selCoBind()
   await selec1Bind()
   await selec2Bind()
   await selec3Bind()
