@@ -2,7 +2,6 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import fs from 'fs'
 import path from 'path'
-import util from 'util'
 import Security from '../lib/security'
 import db from '../db/userDb'
 import Common from '../lib/common'
@@ -11,10 +10,10 @@ import config from '../config'
 import Payload from '../model/payload'
 
 const common = new Common()
-const payload = new Payload()
 
 const controll = {
   register: async (ctx) => {
+    const payload = new Payload()
     try {
       const email = common.requestPost(ctx, 'email')
       const pwd = common.requestPost(ctx, 'pwd')
@@ -39,6 +38,7 @@ const controll = {
     ctx.body = payload.model()
   },
   validateEmail: async (ctx) => {
+    const payload = new Payload()
     try {
       const code = unescape(ctx.params.code.split('||').join('/'))
       const email = Security.decrypt(code)
@@ -60,6 +60,7 @@ const controll = {
     await ctx.render('user/validate', { script: 'user/validate', payload: payload.model() })
   },
   recaptch: async (ctx) => {
+    const payload = new Payload()
     try {
       const keys = await fs.readFileSync(path.join(__dirname, '../lib/keys/recaptch'), 'utf-8')
       const result = await axios({
@@ -82,6 +83,7 @@ const controll = {
     ctx.body = payload.model()
   },
   login: async (ctx) => {
+    const payload = new Payload()
     try {
       const email = common.requestPost(ctx, 'email')
       const pwd = common.requestPost(ctx, 'pwd')
@@ -187,6 +189,7 @@ const controll = {
     }
   },
   find: async (ctx) => {
+    const payload = new Payload()
     try {
       const emails = common.requestPost(ctx, 'email')
       const checkInfo = await db.getUserByEmail(emails)
@@ -210,6 +213,7 @@ const controll = {
     ctx.body = payload.model()
   },
   reset: async (ctx) => {
+    const payload = new Payload()
     try {
       const code = ctx.params.code
       const keys = await fs.readFileSync(path.join(__dirname, '../lib/keys/tokenKey'), 'utf-8')
@@ -226,6 +230,7 @@ const controll = {
     await ctx.render('user/reset', { script: 'user/reset', payload: payload.model() })
   },
   changePwd: async (ctx) => {
+    const payload = new Payload()
     try {
       const code = common.requestPost(ctx, 'code')
       const pwd = common.requestPost(ctx, 'pwd')
@@ -241,7 +246,7 @@ const controll = {
       } else {
         payload.result = false
         payload.data = null
-        payload.message = '없는 이메일 주소이거나 인증되지 않은 이메일 주소 입니다.'
+        payload.message = '없는 이메일 주소이거나 인증되지 않은 이메일 주소 입니다. 메일함으로 가셔서 인증 이메일이 왔나 확인해주세요. 10분이상 지나도 이메일이 안왔으면 알려주세요.'
       }
     } catch (err) {
       console.log(err)

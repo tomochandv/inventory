@@ -8,11 +8,12 @@ import swal from 'sweetalert'
 import { loginAxios, retunData } from '../lib/axios'
 import '../lib/navbar'
 
+const pridx = document.querySelector('#pridx')
 const sel1 = document.querySelector('#sel1')
 const sel2 = document.querySelector('#sel2')
 const sel3 = document.querySelector('#sel3')
 const name = document.querySelector('#txtnm')
-const qty = document.querySelector('#qty')
+// const qty = document.querySelector('#qty')
 const desc = document.querySelector('#desc')
 
 const selec1Bind = async () => {
@@ -65,15 +66,38 @@ const save = async () => {
     name: name.value,
     qty: 0,
     desc: desc.value,
+    pridx: pridx.value,
   }
-  const info = await loginAxios.post('product/add', data)
+  const url = pridx.value === '0' ? 'product/add' : 'product/edit'
+  const info = await loginAxios.post(url, data)
   const datas = await retunData(info)
   if (datas.data.result) {
     const yes = await swal('Yap~!', datas.data.message, 'success')
     if (yes) {
-      name.value = ''
-      // qty.value = ''
-      desc.value = ''
+      if (pridx.value === '0') {
+        name.value = ''
+        desc.value = ''
+      } else {
+        window.location.href = '/product'
+      }
+    }
+  } else {
+    swal('Oops.....', datas.data.message, 'error')
+  }
+}
+
+const getDetail = async () => {
+  const info = await loginAxios.get(`product/detail?pridx=${pridx.value}`)
+  const datas = await retunData(info)
+  if (datas.data.result) {
+    if (datas.data.data.length === 1) {
+      sel1.value = datas.data.data[0].caidx
+      await selec2Bind()
+      sel2.value = datas.data.data[0].subidx
+      await selec3Bind()
+      sel3.value = datas.data.data[0].botidx
+      name.value = datas.data.data[0].pr_nm
+      desc.value = datas.data.data[0].pr_desc
     }
   } else {
     swal('Oops.....', datas.data.message, 'error')
@@ -96,8 +120,12 @@ window.addEventListener('load', () => {
 
 const init = async () => {
   await selec1Bind()
-  await selec2Bind()
-  await selec3Bind()
+  if (pridx.value !== '0') {
+    getDetail()
+  } else {
+    await selec2Bind()
+    await selec3Bind()
+  }
 }
 
 init()

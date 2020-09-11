@@ -96,7 +96,7 @@ const tableBind = async () => {
     if (datas.data.data.length > 0) {
       datas.data.data.forEach((item) => {
         html += `<tr>
-          <td scope="row" class="text-center">${item.pridx}</td>
+          <td scope="row" class="text-center"><u><a href="/product/add?pridx=${item.pridx}">${item.pridx}</a></u></td>
           <td class="text-center">${item.ca_nm}</td>
           <td class="text-center">${item.sub_nm}</td>
           <td class="text-center">${item.bot_nm}</td>
