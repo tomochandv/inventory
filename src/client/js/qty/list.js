@@ -5,6 +5,7 @@ import $ from 'jquery'
 import 'bootstrap'
 import 'popper.js'
 import swal from 'sweetalert'
+import numeral from 'numeral'
 import { loginAxios, retunData } from '../lib/axios'
 import '../lib/navbar'
 
@@ -61,8 +62,8 @@ const selec3Bind = async () => {
 const updateQty = async (e) => {
   const target = e.target
   const pridx = target.value
-  const qtyElement = target.parentElement.parentElement.children[5].children[0]
-  const priceelement = target.parentElement.parentElement.children[6].children[0]
+  const qtyElement = target.parentElement.parentElement.children[6].children[0]
+  const priceelement = target.parentElement.parentElement.children[7].children[0]
   const info = await loginAxios.post('qty/add', {
     pridx,
     qty: qtyElement.value,
@@ -95,10 +96,11 @@ const tableBind = async () => {
       datas.data.data.forEach((item) => {
         html += `<tr>
           <td scope="row" class="text-center">${item.pridx}</td>
+          <td class="text-center">${item.co_nm}</td>
           <td class="text-center">${item.ca_nm} > ${item.sub_nm} > ${item.bot_nm}</td>
           <td class="text-center">${item.pr_nm}</td>
           <td class="text-center">${item.pr_desc}</td>
-          <td class="text-center">${item.qty}</td>
+          <td class="text-center">${numeral(item.qty).format('0,0')}</td>
           <td class="text-center"><input class="form-control form-control-sm" type="number" name="txtQty"></td>
           <td class="text-center"><input class="form-control form-control-sm" type="number" name="txtPrice"></td>
           <td class="text-center">

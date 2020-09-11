@@ -12,6 +12,7 @@ const pridx = document.querySelector('#pridx')
 const sel1 = document.querySelector('#sel1')
 const sel2 = document.querySelector('#sel2')
 const sel3 = document.querySelector('#sel3')
+const selCo = document.querySelector('#selCo')
 const name = document.querySelector('#txtnm')
 // const qty = document.querySelector('#qty')
 const desc = document.querySelector('#desc')
@@ -58,6 +59,21 @@ const selec3Bind = async () => {
   }
 }
 
+const selCoBind = async () => {
+  const info = await loginAxios.get('corporation/list?page=1&perPage=999999&name=')
+  const datas = await retunData(info)
+  if (datas.data.result) {
+    $(selCo).children('option').remove()
+    $(selCo).append('<option value="">없음</option>')
+    datas.data.data.list.forEach((element) => {
+      const html = `<option value="${element.coidx}">${element.co_nm}</option>`
+      $(selCo).append(html)
+    })
+  } else {
+    swal('Oops.....', datas.data.message, 'error')
+  }
+}
+
 const save = async () => {
   const data = {
     caidx: sel1.value,
@@ -67,6 +83,7 @@ const save = async () => {
     qty: 0,
     desc: desc.value,
     pridx: pridx.value,
+    coidx: selCo.value,
   }
   const url = pridx.value === '0' ? 'product/add' : 'product/edit'
   const info = await loginAxios.post(url, data)
@@ -98,6 +115,7 @@ const getDetail = async () => {
       sel3.value = datas.data.data[0].botidx
       name.value = datas.data.data[0].pr_nm
       desc.value = datas.data.data[0].pr_desc
+      selCo.value = datas.data.data[0].coidx === 0 ? '' : datas.data.data[0].coidx
     }
   } else {
     swal('Oops.....', datas.data.message, 'error')
@@ -119,6 +137,7 @@ window.addEventListener('load', () => {
 })
 
 const init = async () => {
+  selCoBind()
   await selec1Bind()
   if (pridx.value !== '0') {
     getDetail()

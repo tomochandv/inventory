@@ -33,6 +33,15 @@ router.get('/static', async (ctx) => {
   await ctx.render('static/list', { script: 'static/list' })
 })
 
+router.get('/corporation', async (ctx) => {
+  await ctx.render('corporation/list', { script: 'corporation/list' })
+})
+
+router.get('/corporation/add', async (ctx) => {
+  const coidx = new Common().requestGetInt(ctx, 'coidx')
+  await ctx.render('corporation/add', { script: 'corporation/add', coidx })
+})
+
 router.post('/category/add/1', controll.addFirstCategory)
 router.get('/category/1', controll.getFirstCategory)
 router.post('/category/add/2', controll.addSecondCategory)
@@ -53,4 +62,10 @@ router.post('/qty/add', controll.productAdd)
 router.get('/qty/history/list', controll.getProductHistoryList)
 
 router.get('/static/list', controll.getStaticList)
+
+router.get('/corporation/list', controll.getCoporList)
+router.get('/corporation/detail', controll.getCoporDetail)
+router.post('/corporation/add', controll.addCopor)
+router.post('/corporation/edit', controll.editCopor)
+router.post('/corporation/remove', controll.removeCopor)
 export default router
