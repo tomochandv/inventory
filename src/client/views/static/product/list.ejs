@@ -1,10 +1,10 @@
-<%- include('../header') -%>
-<%- include('../nav') -%>
+<%- include('../../header') -%>
+<%- include('../../nav') -%>
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
       <div class="card border-success mb-3">
-        <div class="card-header">통계 검색</div>
+        <div class="card-header">품목별 통계 검색</div>
         <div class="card-body">
           <form>
             <div class="form-row">
@@ -50,9 +50,17 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12 text-right" style="margin-bottom: 1em;">
-      <p class="read align-bottom">총 <span id="qty">0</span>건의 자료가 있습니다.</p>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6 text-left">
+          <button class="btn btn-outline-warning" type="button" id="chart"><i class="fas fa-chart-pie"></i></button>
+        </div>
+        <div class="col-md-6 text-right" style="margin-bottom: 1em;">
+          <p class="read align-bottom">총 <span id="qty">0</span>건의 자료가 있습니다.</p>
+        </div>
+      </div>
     </div>
+
     <div class="col-md-12">
       <table class="table">
         <thead>
@@ -75,4 +83,4 @@
     </div>
   </div>
 </div>
-<%- include('../footer') -%>
+<%- include('../../footer') -%>

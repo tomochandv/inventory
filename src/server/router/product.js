@@ -29,10 +29,6 @@ router.get('/qty/history', async (ctx) => {
   await ctx.render('qty/history', { script: 'qty/history' })
 })
 
-router.get('/static', async (ctx) => {
-  await ctx.render('static/list', { script: 'static/list' })
-})
-
 router.get('/corporation', async (ctx) => {
   await ctx.render('corporation/list', { script: 'corporation/list' })
 })
@@ -60,8 +56,6 @@ router.post('/product/remove', controll.removeProduct)
 
 router.post('/qty/add', controll.productAdd)
 router.get('/qty/history/list', controll.getProductHistoryList)
-
-router.get('/static/list', controll.getStaticList)
 
 router.get('/corporation/list', controll.getCoporList)
 router.get('/corporation/detail', controll.getCoporDetail)
