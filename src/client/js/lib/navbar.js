@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie'
 import moment from 'moment'
+import swal from 'sweetalert'
 import { normalAxios } from './axios'
 
 /**
@@ -37,11 +38,22 @@ document.querySelector('#alertClose').addEventListener('click', async () => {
 
 /** 상단 아이디 표시 */
 const email = window.sessionStorage.getItem('email')
-
 if (email !== null) {
   document.querySelector('#logout').innerHTML = email
 }
-
+document.querySelector('#logout').addEventListener('click', async () => {
+  const will = await swal({
+    title: '로그아웃 하시겠습니까?',
+    icon: 'info',
+    buttons: ['No', 'Yes!'],
+    dangerMode: false,
+  })
+  if (will) {
+    window.sessionStorage.removeItem('bear-token')
+    window.sessionStorage.removeItem('email')
+    window.location.href = '/'
+  }
+})
 /**
  * 네비게이션 포커스
  */
@@ -53,7 +65,7 @@ if (url.indexOf('category') !== -1) {
     item.classList.remove('active')
   })
   items[1].classList.add('active')
-} else if (url.indexOf('product') !== -1) {
+} else if (url.indexOf('product') !== -1 && url.indexOf('static') === -1) {
   items.forEach((item) => {
     item.classList.remove('active')
   })
@@ -68,7 +80,7 @@ if (url.indexOf('category') !== -1) {
     item.classList.remove('active')
   })
   items[2].classList.add('active')
-} else if (url.indexOf('static') !== -1) {
+} else if (url.indexOf('static/product') !== -1) {
   items.forEach((item) => {
     item.classList.remove('active')
   })

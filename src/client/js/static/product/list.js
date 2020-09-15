@@ -1,5 +1,5 @@
 /**
- * @output static/list.min
+ * @output static/product/list.min
  */
 import $ from 'jquery'
 import 'bootstrap'
@@ -10,9 +10,9 @@ import 'flatpickr/dist/themes/confetti.css'
 import moment from 'moment'
 import numeral from 'numeral'
 import swal from 'sweetalert'
-import { loginAxios, retunData } from '../lib/axios'
-import '../lib/navbar'
-import Pager from '../lib/pager'
+import { loginAxios, retunData } from '../../lib/axios'
+import '../../lib/navbar'
+import Pager from '../../lib/pager'
 
 const perPage = 20
 const sel1 = document.querySelector('#sel1')
@@ -85,7 +85,7 @@ const createPager = async (curpage, total) => {
 }
 
 const tableBind = async (page) => {
-  const info = await loginAxios.get('static/list', {
+  const info = await loginAxios.get('static/product/list', {
     params: {
       page,
       perPage,
@@ -138,4 +138,15 @@ sel2.addEventListener('change', async () => {
 })
 document.querySelector('#search').addEventListener('click', () => {
   tableBind(1)
+})
+document.querySelector('#chart').addEventListener('click', () => {
+  let url = '/static/product/chart?'
+  url += `caidx=${sel1.value}`
+  url += `&subidx=${sel2.value}`
+  url += `&botidx=${sel3.value}`
+  url += `&prnm=${name.value}`
+  url += `&type=${type.value}`
+  url += `&sdate=${duration.selectedDates.length === 0 ? '' : moment(duration.selectedDates[0]).format('YYYY-MM-DD')}`
+  url += `&edate=${duration.selectedDates.length === 0 ? '' : moment(duration.selectedDates[1]).format('YYYY-MM-DD')}`
+  window.open(url, 'chart')
 })
