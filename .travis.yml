@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - 12
+dist: trusty
+env:
+  – NODE_ENV=production
+cache:
+  directories:
+    – node_modules
+install:
+  – npm install
+  – npm run build
+script:
+  – npm run build
