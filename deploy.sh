@@ -9,4 +9,4 @@ cp ~/configs/tokenKey ~/app/dist/server/lib/keys/tokenKey
 echo "> pm2 삭제"
 pm2 stop pinventory
 echo "> pm2 시작"
-pm2 start ~/app/pm2.json
+pm2 start /home/totomung08/app/pm2.json
