@@ -26,7 +26,7 @@ deploy:
     bucket: tomochan-code-deploy
     region: ap-northeast-2
     skip_cleanup: true
-    acl: public_read
+    acl: private
     wait-until-deployed: true
     local_dir: deploy
     on:
