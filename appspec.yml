@@ -3,9 +3,14 @@ os: linux
 files:
   - source:  /
     destination: /home/totomung08/app/
-
+    overwrite: yes
+permissions:
+- object: /
+  pattern: "**"
+  owner: totomung08
+  group: totomung08
 hooks:
   AfterInstall: # 배포가 끝나면 아래 명령어를 실행
     - location: execute-deploy.sh
       timeout: 180
-      runas: root
+      runas: totomung08
