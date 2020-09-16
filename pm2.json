@@ -12,8 +12,8 @@
           "NODE_ENV": "production"
       },
       "log_date_format": "YY-MM-DD HH:mm:ss",
-      "error_file": "./logs/err.log",
-      "out_file": "./logs/out.log"
+      "error_file": "/home/totomung08/app/logs/err.log",
+      "out_file": "/home/totomung08/app/logs/out.log"
     }
   ]
 }
