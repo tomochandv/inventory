@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "pinventory",
-      "script": "dist/server/index.js",
+      "script": "/home/totomung08/app/dist/server/index.js",
       "merge_logs": true,
       "max_restarts": 20,
       "exec_mode": "cluster",
