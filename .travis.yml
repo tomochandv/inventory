@@ -29,10 +29,23 @@ deploy:
     acl: public_read
     wait-until-deployed: true
     local_dir: deploy
-    bundle_type: zip
-    key: nodejsdist.zip # S3 버킷에 저장된 파일을 EC2로 배포
-    application: inventory # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
-    deployment_group: inventory-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
     on:
       repo: tomochandv/inventory #Github 주소
       branch: master
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+    region: ap-northeast-2
+    bucket: tomochan-code-deploy
+    key: nodejsdist.zip # S3 버킷에 저장된 파일을 EC2로 배포
+    bundle_type: zip
+    application: inventory # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: inventory-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    wait-until-deployed: true
+    on:
+      repo: tomochandv/inventory #Github 주소
+      branch: master
+    
+    
+    
