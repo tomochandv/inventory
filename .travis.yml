@@ -14,6 +14,11 @@ install:
 script:
   – npm run build
 
+before_deploy:
+  - zip -r nodejsdist *
+  - mkdir -p deploy
+  - mv nodejsdist.zip deploy/nodejsdist.zip
+
 deploy:
   - provider: s3
     access_key_id: $AWS_ACCESS_KEY
@@ -26,3 +31,4 @@ deploy:
     on:
       repo: tomochandv/inventory #Github 주소
       branch: master
+    local_dir: deploy
