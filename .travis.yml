@@ -30,6 +30,7 @@ deploy:
     wait-until-deployed: true
     local_dir: deploy
     bundle_type: zip
+    key: nodejsdist.zip # S3 버킷에 저장된 파일을 EC2로 배포
     application: inventory # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
     deployment_group: inventory-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
     on:
