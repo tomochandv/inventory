@@ -1,25 +1,30 @@
 {
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
   "extends": "airbnb-base",
   "rules": {
     "semi": [
       "error",
       "never"
     ],
-    "guard-for-in": 0,
-    "linebreak-style": 0,
-    "no-await-in-loop": 0,
-    "no-undef": 0,
-    "no-restricted-syntax": 0,
-    "prefer-destructuring": ["error", {
-      "array": false,
-      "object": false
-    }, {
-      "enforceForRenamedProperties": false
-    }],
-    "no-console": "off",
-    "max-len": [2, 150, 4, {"ignoreUrls": true}],
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "optionalDependencies": false, "peerDependencies": false}],
-    "no-loop-func":"off",
-    "no-useless-catch": "off"
+  "guard-for-in": 0,
+  "linebreak-style": 0,
+  "no-await-in-loop": 0,
+  "no-undef": 0,
+  "no-restricted-syntax": 0,
+  "prefer-destructuring": ["error", {
+    "array": false,
+    "object": false
+  }, {
+    "enforceForRenamedProperties": false
+  }],
+  "no-console": "off",
+  "max-len": [2, 150, 4, {"ignoreUrls": true}],
+  "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "optionalDependencies": false, "peerDependencies": false}],
+  "no-loop-func":"off",
+  "no-useless-catch": "off"
   }
 }

@@ -3,3 +3,4 @@ webpack.config.js
 dist/
 node_modules/
 src/client/js/app.js
+test/
